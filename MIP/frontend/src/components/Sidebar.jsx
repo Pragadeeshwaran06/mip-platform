@@ -20,7 +20,7 @@ function Sidebar({ currentPage, setCurrentPage, user }) {
   const menuItems = user?.role === 'Admin' ? adminMenu : studentMenu;
 
   return (
-    <div className="w-64 min-h-screen bg-white border-r border-slate-100 flex flex-col pt-8 sticky top-0">
+    <div className="w-64 min-h-screen bg-white border-r border-slate-100 hidden lg:flex flex-col pt-8 sticky top-0">
       <div className="px-8 mb-10">
         <span className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">{user?.role} Portal</span>
       </div>

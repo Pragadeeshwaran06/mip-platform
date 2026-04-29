@@ -21,7 +21,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} user={user} setUser={setUser} />
 
-      <div className="flex flex-col md:flex-row flex-grow">
+      <div className="flex flex-col lg:flex-row flex-grow">
         {(user?.role === 'Student' || user?.role === 'Admin') && currentPage !== 'home' && currentPage !== 'auth' && (
           <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} user={user} />
         )}
