@@ -8,7 +8,7 @@ const path = require('path');
 
 // Initialize the Express app
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // ==========================================
 // FIREWALL / SECURITY MIDDLEWARE
@@ -18,8 +18,20 @@ const PORT = 5000;
 app.use(helmet());
 
 // 2. Strict CORS: Allow specific React frontend to talk to this API
+const allowedOrigins = [
+  process.env.FRONTEND_URL, 
+  process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null,
+  'http://localhost:5173'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Uses Vercel URL in production, localhost in development
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
