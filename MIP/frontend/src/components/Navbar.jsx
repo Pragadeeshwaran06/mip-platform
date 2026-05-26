@@ -17,7 +17,7 @@ function Navbar({ currentPage, setCurrentPage, user, setUser }) {
 
   return (
     <nav className="sticky top-0 z-50 glass-panel shadow-sm relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-responsive">
         <div className="flex justify-between h-20 items-center">
           
           {/* Logo Section */}

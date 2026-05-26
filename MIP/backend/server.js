@@ -46,10 +46,11 @@ const taskLimiter = rateLimit({
 app.use(express.json()); // Allows our server to understand JSON data from React
 
 // Initialize SQLite Database
-const dbPath = path.resolve(__dirname, 'database.sqlite');
+// Use DB_PATH from environment (for Render persistent disk) or default to local file
+const dbPath = process.env.DB_PATH || path.resolve(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error('Error connecting to SQLite database:', err.message);
-  else console.log('Connected to the SQLite database.');
+  else console.log(`Connected to the SQLite database at ${dbPath}`);
 });
 
 // Create Tables

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { mockTasks, mockUsers } from '../data/mockData';
 import adminBg from '../assets/admin-bg.png';
 
 
@@ -22,20 +21,13 @@ function AdminDashboard() {
         const usersData = await usersRes.json();
         const appsData = await appsRes.json();
 
-        // Merge server data with mock data
-        const mockTasksWithIds = mockTasks.map(t => ({ ...t, id: `m-${t.id}` }));
-        const mockUsersWithIds = mockUsers.map(u => ({ ...u, id: `u-${u.id}` }));
-
-        const mergedTasks = Array.isArray(tasksData) ? [...tasksData, ...mockTasksWithIds.filter(mt => !tasksData.find(st => st.title === mt.title))] : mockTasksWithIds;
-        const mergedUsers = Array.isArray(usersData) ? [...usersData, ...mockUsersWithIds.filter(mu => !usersData.find(su => su.email === mu.email))] : mockUsersWithIds;
-
-        setTasks(mergedTasks);
-        setUsers(mergedUsers);
+        setTasks(Array.isArray(tasksData) ? tasksData : []);
+        setUsers(Array.isArray(usersData) ? usersData : []);
         setApplications(appsData || []);
       } catch (err) {
-        console.error("Error fetching admin data, using mock fallbacks:", err);
-        setTasks(mockTasks);
-        setUsers(mockUsers);
+        console.error("Error fetching admin data:", err);
+        setTasks([]);
+        setUsers([]);
       } finally {
         setLoading(false);
       }
@@ -70,7 +62,7 @@ function AdminDashboard() {
   ];
 
   return (
-    <div className="flex-grow max-w-7xl mx-auto px-4 py-12 relative">
+    <div className="flex-grow container-responsive section-padding relative">
       {/* Background Image Layer */}
       <div 
         className="fixed inset-0 z-0 opacity-10 pointer-events-none"

@@ -55,7 +55,7 @@ function AIAssistant() {
   ];
 
   return (
-    <div className="flex-grow flex flex-col h-[calc(100vh-120px)] max-w-4xl mx-auto w-full px-4 py-8 relative">
+    <div className="flex-grow flex flex-col h-[calc(100vh-120px)] container-responsive section-padding relative">
       {/* Background Image Layer */}
       <div 
         className="fixed inset-0 z-0 opacity-10 pointer-events-none"

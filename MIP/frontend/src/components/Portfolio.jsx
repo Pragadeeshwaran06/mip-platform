@@ -1,12 +1,50 @@
-import React from 'react';
-import { mockStudentStats, mockBadges, mockTasks } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
 
 function Portfolio({ user }) {
-  // Use first 3 tasks as "completed" tasks for mock purposes
-  const completedTasks = mockTasks.slice(0, 3);
+  const [completedTasks, setCompletedTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      if (!user || !user.id) return;
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/applications/${user.id}`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          // Fake completion status based on applied tasks for demonstration
+          const tasksWithSkills = data.map(app => ({
+            ...app,
+            skills: app.skills ? (typeof app.skills === 'string' ? JSON.parse(app.skills) : app.skills) : ['General']
+          }));
+          setCompletedTasks(tasksWithSkills.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Failed to fetch history:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHistory();
+  }, [user]);
+
+  const studentStats = [
+    { label: 'Tasks Completed', value: completedTasks.length, icon: '🎯' },
+    { label: 'Total Earned', value: '₹0', icon: '💰' },
+    { label: 'Avg Rating', value: 'N/A', icon: '⭐' },
+    { label: 'Rank', value: 'Novice', icon: '🏆' }
+  ];
+
+  const badges = [
+    { id: 1, name: 'First Application', description: 'Applied to your first task', icon: '📝' },
+    { id: 2, name: 'Profile Complete', description: 'Added skills and bio', icon: '✅' }
+  ];
   
+  if (loading) {
+    return <div className="text-center mt-20 text-xl font-bold text-slate-600">Loading Portfolio...</div>;
+  }
+
   return (
-    <div className="flex-grow max-w-7xl mx-auto px-4 py-16">
+    <div className="flex-grow container-responsive section-padding">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* Left Column: Profile Card */}
@@ -47,7 +85,7 @@ function Portfolio({ user }) {
           
           {/* Stats Summary */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {mockStudentStats.map((stat, i) => (
+            {studentStats.map((stat, i) => (
               <div key={i} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
                 <div className="text-xl mb-3">{stat.icon}</div>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{stat.label}</p>
@@ -76,7 +114,7 @@ function Portfolio({ user }) {
                     <span className="text-emerald-600 font-black text-sm">{task.price}</span>
                   </div>
                   <div className="flex gap-2">
-                    {task.skills.map(skill => (
+                    {task.skills && task.skills.map(skill => (
                       <span key={skill} className="text-[9px] font-bold text-slate-400 bg-white border border-slate-100 px-2 py-0.5 rounded-md uppercase">
                         {skill}
                       </span>
@@ -91,7 +129,7 @@ function Portfolio({ user }) {
           <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm">
             <h3 className="text-xl font-black text-slate-900 mb-8">Achievements</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-              {mockBadges.map((badge) => (
+              {badges.map((badge) => (
                 <div key={badge.id} className="text-center group cursor-help">
                   <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 group-hover:bg-indigo-50 transition-all border border-slate-100">
                     {badge.icon}

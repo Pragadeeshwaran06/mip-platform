@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { mockTasks } from '../data/mockData';
 import marketplaceBg from '../assets/marketplace-bg.png';
 
 
@@ -18,6 +17,15 @@ function TaskBoard({ user }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeSubCategory, setActiveSubCategory] = useState('All');
+  const [apiError, setApiError] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const categories = {
     'Technical': [
@@ -46,14 +54,10 @@ function TaskBoard({ user }) {
         const taskResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks`);
         const taskData = await taskResponse.json();
         
-        let finalTasks = [];
         if (Array.isArray(taskData)) {
-          const mockWithUniqueIds = mockTasks.map(t => ({ ...t, id: `m-${t.id}` }));
-          finalTasks = [...taskData, ...mockWithUniqueIds.filter(mt => !taskData.find(dt => dt.title === mt.title))];
-          setAvailableTasks(finalTasks);
+          setAvailableTasks(taskData);
         } else {
-          finalTasks = mockTasks.map(t => ({ ...t, id: `m-${t.id}` }));
-          setAvailableTasks(finalTasks);
+          setAvailableTasks([]);
         }
 
         // Fetch User's Applications if logged in
@@ -66,8 +70,9 @@ function TaskBoard({ user }) {
           }
         }
       } catch (error) {
-        console.error("Error fetching data, falling back to mock data:", error);
-        setAvailableTasks(mockTasks);
+        console.error("Error fetching data:", error);
+        setApiError("Live data is currently unavailable.");
+        setAvailableTasks([]);
       } finally {
         setLoading(false);
       }
@@ -85,17 +90,6 @@ function TaskBoard({ user }) {
     
     if (!user) {
       alert("Please log in to apply.");
-      return;
-    }
-
-    // In a real app, mock tasks (with 'm-' prefix) can't be applied to in the DB
-    // but we'll simulate success for them too for a "working model" feel.
-    if (typeof selectedTask.id === 'string' && selectedTask.id.startsWith('m-')) {
-      console.log("Simulating application for mock task:", selectedTask.id);
-      setAppliedTasks(prev => new Set([...prev, selectedTask.id]));
-      setIsModalOpen(false);
-      setSelectedTask(null);
-      setApplicantData({ fullName: '', collegeName: '', department: '', year: '1st Year' });
       return;
     }
 
@@ -158,11 +152,25 @@ function TaskBoard({ user }) {
   })).sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
 
   if (loading) {
-    return <div className="text-center mt-20 text-xl font-bold text-slate-600">Loading Tasks...</div>;
+    return (
+      <div className="flex-grow container-responsive section-padding">
+        <div className="animate-pulse space-y-8">
+          <div className="h-12 bg-slate-200 rounded-2xl w-2/3 md:w-1/3"></div>
+          <div className="h-12 bg-slate-200 rounded-2xl w-full md:w-1/2"></div>
+          <div className="grid-cards">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="h-64 bg-slate-200 rounded-3xl"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
   }
 
+  const displayedTasks = isMobile ? filteredTasks.slice(0, visibleCount) : filteredTasks;
+
   return (
-    <div className="flex-grow max-w-6xl mx-auto px-4 py-16 relative">
+    <div className="flex-grow container-responsive section-padding relative">
       {/* Background Image Layer */}
       <div 
         className="fixed inset-0 z-0 opacity-10 pointer-events-none"
@@ -175,6 +183,12 @@ function TaskBoard({ user }) {
       ></div>
       
       <div className="relative z-10">
+      {apiError && (
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl flex items-center gap-3">
+          <span className="text-xl">⚠️</span>
+          <span className="font-bold text-sm">{apiError}</span>
+        </div>
+      )}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div className="max-w-2xl">
           <span className="inline-block px-3 py-1 mb-4 text-[10px] font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 rounded-full">
@@ -254,8 +268,8 @@ function TaskBoard({ user }) {
         )}
       </div>
 
-      <div className="grid gap-6">
-        {filteredTasks.length === 0 ? (
+      <div className="grid-cards">
+        {displayedTasks.length === 0 ? (
           <div className="py-24 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200">
             <div className="text-5xl mb-6">🔍</div>
             <h3 className="text-2xl font-bold text-slate-900 mb-2">No matching tasks found</h3>
@@ -270,7 +284,7 @@ function TaskBoard({ user }) {
             )}
           </div>
         ) : (
-          filteredTasks.map((task) => (
+          displayedTasks.map((task) => (
             <div key={task.id} className="group bg-white border border-slate-100 rounded-3xl p-8 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
               
               <div className="flex-grow">
@@ -337,6 +351,17 @@ function TaskBoard({ user }) {
           ))
         )}
       </div>
+
+      {isMobile && visibleCount < filteredTasks.length && (
+        <div className="mt-8 text-center">
+          <button 
+            onClick={() => setVisibleCount(prev => prev + 4)}
+            className="bg-indigo-50 text-indigo-600 font-bold py-3.5 px-8 rounded-2xl border border-indigo-100 hover:bg-indigo-100 transition-colors shadow-sm w-full sm:w-auto"
+          >
+            Load More Tasks
+          </button>
+        </div>
+      )}
 
 
       {/* Application Modal */}

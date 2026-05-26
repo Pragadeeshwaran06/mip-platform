@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { mockNotifications } from '../data/mockData';
 
 function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState(mockNotifications);
+  const [notifications, setNotifications] = useState([{ id: 1, type: 'info', title: 'Welcome!', message: 'Start exploring tasks and apply to build your profile.', time: 'Just now', read: false }]);
   const dropdownRef = useRef(null);
 
   const unreadCount = notifications.filter(n => !n.read).length;

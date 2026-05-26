@@ -60,7 +60,7 @@ function Settings({ user, setUser }) {
   };
 
   return (
-    <div className="flex-grow max-w-4xl mx-auto px-4 py-16 animate-in fade-in duration-500">
+    <div className="flex-grow container-responsive section-padding animate-in fade-in duration-500">
       <div className="mb-10">
         <h2 className="text-4xl font-black text-slate-900 mb-2">Settings</h2>
         <p className="text-slate-500 font-medium text-lg">Manage your profile and platform preferences.</p>

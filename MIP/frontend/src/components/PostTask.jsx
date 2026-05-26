@@ -78,7 +78,7 @@ function PostTask({ user }) {
   };
 
   return (
-    <div className="flex-grow flex justify-center items-center px-4 py-16 bg-slate-50">
+    <div className="flex-grow container-responsive section-padding flex justify-center items-center bg-slate-50">
       <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-3xl p-10 shadow-2xl shadow-indigo-100/30">
         <div className="flex items-center gap-4 mb-8">
           <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-100">

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: mip-backend
+    env: node
+    rootDir: MIP/backend
+    buildCommand: npm install
+    startCommand: npm start
+    disk:
+      name: sqlite-data
+      mountPath: /opt/render/project/src/MIP/backend/data
+      sizeGB: 1
+    envVars:
+      - key: DB_PATH
+        value: /opt/render/project/src/MIP/backend/data/database.sqlite
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: "https://your-vercel-frontend-url.vercel.app" # Update this once Vercel is deployed

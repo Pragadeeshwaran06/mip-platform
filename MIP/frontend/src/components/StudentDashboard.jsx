@@ -1,5 +1,4 @@
 import React from 'react';
-import { mockSkills, mockBadges, mockActivities } from '../data/mockData';
 import dashboardBg from '../assets/dashboard-bg.png';
 
 
@@ -34,27 +33,29 @@ function StudentDashboard({ user }) {
   ];
 
   const skills = React.useMemo(() => {
-    return user?.skills?.map(s => ({ name: s, level: 40 + (s.length * 5) % 40 })) || mockSkills;
+    return user?.skills?.map(s => ({ name: s, level: 40 + (s.length * 5) % 40 })) || [];
   }, [user?.skills]);
-  const badges = mockBadges;
   
-  // Merge real applications with mock activities for a full feed
-  const activities = [
-    ...realApplications.map(app => ({
-      id: `real-${app.id}`,
-      type: 'applied',
-      task: app.title,
-      time: new Date(app.appliedAt).toLocaleDateString()
-    })),
-    ...mockActivities
-  ].slice(0, 5);
+  // Use static placeholder badges for now
+  const badges = [
+    { id: 1, name: "Fast Starter", icon: "🚀" },
+    { id: 2, name: "Top Performer", icon: "⭐" },
+    { id: 3, name: "Problem Solver", icon: "🧩" }
+  ];
+  
+  const activities = realApplications.map(app => ({
+    id: `real-${app.id}`,
+    type: 'applied',
+    task: app.title,
+    time: new Date(app.appliedAt).toLocaleDateString()
+  })).slice(0, 5);
 
   if (loading) {
     return <div className="text-center mt-20 text-xl font-bold text-slate-600">Loading Dashboard...</div>;
   }
 
   return (
-    <div className="flex-grow max-w-7xl mx-auto px-4 py-12 relative">
+    <div className="flex-grow container-responsive section-padding relative">
       {/* Background Image Layer */}
       <div 
         className="fixed inset-0 z-0 opacity-10 pointer-events-none"

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { mockUsers } from '../data/mockData';
 import authBg from '../assets/auth-bg.png';
 
 
@@ -44,27 +43,8 @@ function AuthPage({ setUser, setCurrentPage }) {
         setError(data.error || 'Authentication failed.');
       }
     } catch (err) {
-      console.warn("Auth server connection failed, checking mock data:", err);
-      
-      // Fallback: Check mock data for login
-      if (isLogin) {
-        const mockUser = mockUsers.find(u => u.email === formData.email && u.password === formData.password);
-        if (mockUser) {
-          setUser(mockUser);
-          setCurrentPage('home');
-          return;
-        } else {
-          setError('Invalid mock credentials. (Try admin@mip.com / password123)');
-        }
-      } else {
-        // Mock registration: Just pretend it worked
-        const newUser = { id: Date.now(), name: formData.name, role: formData.role, email: formData.email };
-        setUser(newUser);
-        setCurrentPage('home');
-        return;
-      }
-      
-      setError('Error connecting to the server and no mock user found.');
+      console.error("Auth server connection failed:", err);
+      setError('Network error. Please try again later.');
     } finally {
       setIsLoading(false);
     }
@@ -200,30 +180,6 @@ function AuthPage({ setUser, setCurrentPage }) {
           </button>
         </div>
 
-        {/* Development Helper: Mock Logins */}
-        <div className="mt-12 pt-8 border-t border-slate-100">
-          <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Development Mode: Quick Login</p>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button 
-              onClick={() => { setUser(mockUsers[1]); setCurrentPage('home'); }}
-              className="px-4 py-2 bg-emerald-50 text-emerald-600 text-[10px] font-bold rounded-lg border border-emerald-100 hover:bg-emerald-100 transition-all"
-            >
-              Student Mock
-            </button>
-            <button 
-              onClick={() => { setUser(mockUsers[4]); setCurrentPage('home'); }}
-              className="px-4 py-2 bg-purple-50 text-purple-600 text-[10px] font-bold rounded-lg border border-purple-100 hover:bg-purple-100 transition-all"
-            >
-              Company Mock
-            </button>
-            <button 
-              onClick={() => { setUser(mockUsers[0]); setCurrentPage('home'); }}
-              className="px-4 py-2 bg-indigo-50 text-indigo-600 text-[10px] font-bold rounded-lg border border-indigo-100 hover:bg-indigo-100 transition-all"
-            >
-              Admin Mock
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
