@@ -170,7 +170,7 @@ function TaskBoard({ user }) {
   const displayedTasks = isMobile ? filteredTasks.slice(0, visibleCount) : filteredTasks;
 
   return (
-    <div className="flex-grow container-responsive section-padding relative">
+    <div className="flex-grow container-responsive section-padding relative overflow-hidden">
       {/* Background Image Layer */}
       <div 
         className="fixed inset-0 z-0 opacity-10 pointer-events-none"
@@ -189,16 +189,16 @@ function TaskBoard({ user }) {
           <span className="font-bold text-sm">{apiError}</span>
         </div>
       )}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-        <div className="max-w-2xl">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
+        <div className="w-full md:max-w-2xl">
           <span className="inline-block px-3 py-1 mb-4 text-[10px] font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 rounded-full">
             Marketplace
           </span>
           <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">Available Micro-Internships</h2>
-          <p className="text-slate-500 mt-3 text-lg font-medium">Complete high-impact tasks to build your portfolio and earn.</p>
+          <p className="text-slate-500 mt-3 text-lg font-medium max-w-2xl">Complete high-impact tasks to build your portfolio and earn.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <div className="relative">
+          <div className="relative w-full md:w-auto">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -207,19 +207,19 @@ function TaskBoard({ user }) {
             <input 
               type="text"
               placeholder="Search tasks, skills, or companies..."
-              className="pl-12 pr-6 py-3.5 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all w-full md:w-80 shadow-sm"
+              className="pl-12 pr-6 py-3.5 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all w-full md:w-96 shadow-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <div className="px-6 py-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl text-sm font-bold text-indigo-600 shadow-sm flex items-center justify-center whitespace-nowrap">
+          <div className="px-6 py-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl text-sm font-bold text-indigo-600 shadow-sm flex items-center justify-center whitespace-nowrap w-full sm:w-auto">
             {filteredTasks.length} {filteredTasks.length === 1 ? 'Task' : 'Tasks'} Found
           </div>
         </div>
       </div>
 
       {/* Category Filters */}
-      <div className="mb-12 space-y-6">
+      <div className="mb-12 space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex flex-wrap gap-3">
           {['All', 'Technical', 'Non-Technical'].map(cat => (
             <button
@@ -268,7 +268,7 @@ function TaskBoard({ user }) {
         )}
       </div>
 
-      <div className="grid-cards">
+      <div className="grid-cards max-w-7xl mx-auto">
         {displayedTasks.length === 0 ? (
           <div className="py-24 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200">
             <div className="text-5xl mb-6">🔍</div>

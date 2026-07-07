@@ -46,6 +46,7 @@ h3 { font-size: clamp(1.125rem, 3vw, 2rem); }
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 16px;
+  box-sizing: border-box;
 }
 @media (min-width: 1024px) {
   .container-responsive {
@@ -105,8 +106,9 @@ input, select, textarea {
 
 .grid-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 24px;
+  align-items: stretch;
 }
 
 .glass-panel {
