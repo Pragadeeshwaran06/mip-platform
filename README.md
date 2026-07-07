@@ -8,9 +8,9 @@
 
 ## 📌 Overview
 
-The **Micro-Internship Engine** is a robust, full-stack web application designed to connect students with companies through short-term, project-based internships. Built with a focus on modern UI/UX design, scalability, and secure architecture, this platform facilitates seamless matching, application processing, and task management.
+The **Micro-Internship Engine** is a polished full-stack platform that helps students find real short-term work opportunities and allows companies to post meaningful micro-internships. The system supports role-specific dashboards for students, companies, and admins, along with secure application workflows, responsive UI, and modern backend protections.
 
-This project was developed with a mobile-first, fully responsive design approach and features an intuitive interface with a premium "Midnight & Indigo" theme.
+Built with a mobile-first responsive design, the project features a professional brand style, rich marketplace search and filters, and an administrative management layer for users, tasks, and applications. It is production-ready and published to GitHub for easy cloning and deployment.
 
 ## ✨ Key Features
 
